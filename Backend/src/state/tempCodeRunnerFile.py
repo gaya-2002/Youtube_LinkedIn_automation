@@ -1,0 +1,1 @@
+ss.get("path_str")

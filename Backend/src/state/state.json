@@ -1,0 +1,12 @@
+{
+  "main_path": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\main.py",
+  "youtube_url": "https://www.youtube.com/shorts/CIR6mZENrvE?feature=share",
+  "downloaded_audio_path": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\steps",
+  "transcript_path": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\outputs\\transcript.txt",
+  "Blog_output": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\outputs\\blog.md",
+  "post_output": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\outputs\\post.md",
+  "edited_post_output": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\outputs\\edited_post.md",
+  "gmail_id": "rohisaran43@gmail.com",
+  "prompt": "Improve and brief the blog",
+  "rewritten_post": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\outputs\\rewritten_post.md"
+}

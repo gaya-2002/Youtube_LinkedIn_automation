@@ -1,0 +1,18 @@
+rewrite:
+  description: >
+    Rewrite or parapharse the given linkedin post to a better format.
+    Improve and finetune the content provided by adding or removing contnet.
+    The edited post should have significant difference from the input provided.
+    Do not hallucinate or genrate fake content, stick to the content provided and add new content only 
+    after making sure that the added content is genuine somehow.
+    I give you full freedom to shrink or expand the post but the lower limit is 150 words and upper limit is 300 words.
+    linkedin Post : {post}
+
+  expected_output: >
+    The ouput should be in markdown format.
+    It should have genuine content.
+    It should only contain the desired post not any sentences other than the post.
+  
+  agent: rewriter
+
+

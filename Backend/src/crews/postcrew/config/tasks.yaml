@@ -1,0 +1,54 @@
+transcript_generation:
+  description: >
+    Use the provided YouTube_Caption_Downloader tool to download English captions for the video at {url}.
+    Do not generate the captions yourself. Do not write a message saying you will use the tool.
+    Just invoke the tool with the given URL and return the actual transcript content from the tool output.
+
+    Tool input format:
+    {
+      "url": "<video-url>"
+    }
+
+    Only use the tool and provide the raw tool output as your final answer.
+  expected_output: >
+    The full transcript (captions) downloaded using the YouTube_Caption_Downloader tool.
+    No extra explanation. No summary. Just the raw result from the tool.
+  agent: transcriptor
+
+text_summarization_to_blog:
+  description: >
+    Take the downloaded captions returned as ouput from YouTube_Caption_Downloader tool as input.
+    Summarize and transform the captions into a clear, engaging, and neatly formatted blog.
+    Do not mention the youtube channel or the speaker of the video in this blog.
+    Make sure the author is in the third person point of view while writing the blog and remove any content that says or hints towards
+    "subscribe to me"
+    Use headings, short paragraphs, and bullet points where appropriate to improve readability.
+    Make sure to include only characters that can be encoded by ASCII, if there are any characters that can't be encoded in ASCII replace it with any suitable alternatives
+    Put them into a nice markdown document.
+  expected_output: >
+    A well-structured blog post summarizing the captions, formatted for easy reading and publication.
+  agent: summariser
+
+blog_to_linkedin_post:
+  description: >
+    Convert the generated blog form the task 'text_summarization_to_blog' into a concise and engaging LinkedIn post.
+    Ensure the post follows clean formatting with clear key points.
+    Include fun and relatable elements to increase reader engagement and shareability.
+  expected_output: >
+    A well-crafted LinkedIn post summarizing the blog content, formatted for LinkedIn, highlighting key points,
+    and including engaging elements generated using the output of the task "text_summarization_to_blog"
+  agent: post_generator
+
+post_editing:
+  description: >
+    Take the generated LinkedIn post from the task 'blog_to_linkedin_post' and review it for grammar, readability, and overall flow.
+    Make necessary corrections and improvements to enhance clarity and engagement.
+  expected_output: >
+    An edited LinkedIn post with improved grammar, better readability, and polished style while maintaining the original message, created
+    using the output of  the task 'blog_to_linkedin_post'
+  agent: editor
+
+
+
+
+
