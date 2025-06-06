@@ -1,155 +1,419 @@
-                .Navigation_bar{
-                    height: 50px;
-                    background-color: rgb(117, 138, 157);
-                }
-                .cloudarmeeLogo {
-                    height: 100px;
-                    width: auto;
-                    margin-top: -25px;
-                }
-                body{
-                    background-color: rgb(215, 232, 238);
-                    font-family: "Roboto", sans-serif;
-                    font-optical-sizing: auto;
-                    font-style: normal;
-                    font-variation-settings:
-                        "wdth" 100;
-                }
-                .MainDiv{
-                    display: flex;
-                }
-                .SubDivLeft{
-                    height: 90vh;
-                    width: 30%;
-                    background-color: white;
-                    border-radius: 10px;
-                    margin-left: 15px;
-                    margin-top: 13px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    padding: 10px;
-                }
-                .InputAndOutputDiv{
-                    height: 90vh;
-                    width: 65%;
-                    background-color: white;
-                    border-radius: 10px;
-                    margin-left: 15px;
-                    margin-top: 13px;
-                    border: 2px solid rgb(127, 189, 227);
-                }
+/* General Body Styles */
+body {
+    /* background-color: #e8f0fe;  */
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Ensure body takes full viewport height */
+    display: flex;
+    flex-direction: column;
+    /* No overflow: hidden; on body to allow elements to determine scroll */
+}
 
-                .SubDivLeft > div {
-                    flex: 1; /* Equal height for all 3 */
-                    border: 2px solid rgb(152, 189, 212);
-                    margin-bottom: 10px;
-                    border-radius: 5px;
-                    overflow-y: auto;
-                }
-                /* Remove bottom margin from last div to prevent overflow */
-                .SubDivLeft > div:last-child {
-                    margin-bottom: 0;
-                }
+/* Navigation Bar */
+.Navigation_bar {
+    height: 50px; /* Taller for more presence */
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08); /* More noticeable but still subtle shadow */
+    z-index: 10; /* Ensure it stays on top of other content */
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
 
-                h5{
-                    color: rgba(0, 0, 94, 0.752);
-                }
-                .CloudarmeelogoOnly{
-                    width: 40px;
-                    height: 40px;
-                }
-                .OutputLogo{
-                    display: flex;
-                }
-                .youtubeLoadinglabel{
-                    margin-top: 12px;
-                    font-size: 17px;
-                }
-                .inputMain{
-                    text-align: center;
-                    margin-left: 70px;
-                    margin-top: 170px;
-                }
-                .InputUrl{
-                    display: flex;
-                    flex-direction: column;
-                    gap:0.5rem;
-                    align-items: center;
-                }
-                .youtubeURL{
-                    width: 250px;
-                    height: 40px;
-                    border: 2px solid rgb(116, 189, 213);
-                    border-radius: 5px;
-                }
-                .sendBtn {
-                    margin-left: 10px;
-                    padding: 8px 16px;
-                    background-color: #8da1f3;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                }
-                .chat_container {
-                    display: flex;
-                    flex-direction: column;
-                    height: 80vh;
-                    border: 1px solid #ffffff;
-                    border-radius: 10px;
-                    overflow: hidden;
-                    background-color: rgb(219, 219, 219);
-                    width: auto;
-                    width: 80%;
-                    margin-left: 100px;
-                    border-radius: 15px;
-                    margin-top: -3px;
-                }
-                .chat_display {
-                    flex: 1;
-                    overflow-y: auto;
-                    padding: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 10px;
-                    background-color: rgb(239, 239, 239);
-                    scroll-behavior: smooth; 
-                }
-                .chat_hidden {
-                    display: none !important;
-                }
-                .get_input_prompt {
-                    display: flex;
-                    padding: 10px;
-                    background-color: rgb(239, 239, 239);
-                    border-top: 1px solid #ddd;
-                }
-                .Input_prompt {
-                    flex: 1;
-                    padding: 8px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                }
-                .user_msg {
-                    align-self: flex-end;
-                    background-color: #abccfe;
-                    padding: 8px 12px;
-                    border-radius: 15px;
-                    max-width: 70%;
-                }
-                .bot_msg {
-                    align-self: flex-start;
-                    background-color: white;
-                    padding: 8px 12px;
-                    border-radius: 15px;
-                    max-width: 70%;
-                }
-                .Description{
-                    overflow-y: auto;
-                    font-style:normal;
-                    color: rgb(64, 32, 81);
-                }
-                .History{
-                    overflow-y: auto;
-                }
+.cloudarmeeLogo {
+    height: 70px; /* Adjusted height for better visibility in the nav */
+    width: auto;
+    margin-top: -20px;
+}
+
+/* Main Content Area */
+.MainDiv {
+    flex-grow: 1; /* Allows it to take up remaining vertical space */
+    display: flex;
+    padding: 10px 20px 20px 20px; /* Reduced top padding from 20px to 10px, kept others same */
+    gap: 25px; /* Increased space between columns */
+    overflow: hidden; /* Keep this for MainDiv to manage its children layout */
+    position: relative; /* Needed for positioning the sidebar absolutely */
+}
+
+/* Side Navigation Wrapper */
+.side-nav-wrapper {
+    position: absolute; /* Sidebar will overlay content */
+    top: 10px; /* Aligns with MainDiv's new top padding */
+    left: 20px; /* Aligns with MainDiv padding */
+    z-index: 20; /* Ensure it's above other content */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align icon and sidebar */
+    transition: all 0.3s ease; /* Smooth transition for sidebar movement */
+}
+
+/* Menu Icon */
+.menu-icon {
+    font-size: 1rem; /* Larger icon */
+    color: #007bff;
+    cursor: pointer;
+    background-color: #ffffff;
+    border-radius: 50%; /* Make it round */
+     /* Fixed width for the circle */
+     /* Fixed height for the circle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 10px; /* Space between icon and sidebar (when visible) */
+    flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.menu-icon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+}
+
+/* Left Sidebar - Modified for toggle functionality */
+.SubDivLeft {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    flex-shrink: 0;
+    /* overflow-y: auto; -- Removed from here, individual sections will scroll */
+    /* Initially hide the sidebar */
+    transform: translateX(-120%); /* Move it further off-screen to the left to hide completely */
+    opacity: 0; /* Make it invisible */
+    pointer-events: none; /* Prevent interaction when hidden */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+    height: calc(100vh - 50px - 40px - 10px - 60px); /* Adjust height based on nav, maindiv padding, icon height+margin */
+    box-sizing: border-box; /* Include padding in height calculation */
+}
+
+/* Class to show the sidebar */
+.SubDivLeft.show {
+    transform: translateX(0); /* Move it into view */
+    opacity: 1; /* Make it visible */
+    pointer-events: all; /* Allow interaction */
+}
+
+/* General styles for direct children of SubDivLeft (Description and History) */
+.SubDivLeft > div {
+    border: 1px solid #e0e7ed; /* Soft border */
+    margin-bottom: 20px; /* More consistent spacing */
+    border-radius: 10px;
+    padding: 18px;
+    background-color: #f7f9fc; /* Slightly different background for inner divs */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Inner shadow for depth */
+}
+
+.SubDivLeft > div:last-of-type {
+    /* If the last-of-type is the History div, allow it to grow */
+    flex-grow: 1;
+    margin-bottom: 0; /* No margin-bottom if it's the last element before the sidebar ends */
+}
+
+
+h5 {
+    color: #2c3e50; /* Darker, sophisticated blue for headings */
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    font-weight: 600; /* Bolder headings */
+    border-bottom: 2px solid #aec6f2; /* Subtle underline effect */
+    padding-bottom: 5px;
+}
+
+.Description p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #556270; /* Soft grey text */
+    text-align: justify;
+}
+
+/* History Section - Make this scrollable */
+.History {
+    /* Removed the fixed height previously here, let flexbox control it */
+    overflow-y: auto; /* Make only history scrollable */
+    /* Ensure flex-grow is applied if you want it to fill space */
+    margin-top: -45px;
+}
+/* Ensure SubDivLeft > div is flex-grow: 1 for History to take space */
+
+
+.History ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.History li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ebf1f7; /* Lighter separator */
+    color: #4a6580;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.History li:hover {
+    color: #007bff;
+    background-color: #eef3f8;
+    padding-left: 5px;
+    border-radius: 5px;
+}
+
+.History li:last-child {
+    border-bottom: none;
+}
+
+.SubDivLeft .btn { /* Target the specific button with .btn class from HTML */
+    padding: 15px 25px;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); /* Subtle gradient */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    flex-shrink: 0; /* Prevent button from shrinking */
+    margin-top: auto; /* Pushes the button to the bottom of the flex container */
+}
+
+.SubDivLeft .btn:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #003f80 100%);
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.SubDivLeft .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+}
+
+
+/* Input and Output (Chat) Division */
+.InputAndOutputDiv {
+    flex-grow: 1; /* Takes up remaining horizontal space */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Ensure chat content doesn't spill - will be handled by chat_display */
+    height: 500px; /* Crucial: Sets the overall height of the chat panel */
+    max-width: 800px; 
+}
+
+.OutputLogo {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid #e0e7ed;
+    background-color: #f7f9fc; /* Light header for chat */
+    box-shadow: inset 0 -1px 3px rgba(0, 0, 0, 0.03); /* Subtle shadow at bottom */
+    flex-shrink: 0; /* Prevent the header from shrinking */
+}
+
+.CloudarmeelogoOnly {
+    width: 45px; /* Slightly larger logo in chat header */
+    height: 45px;
+    margin-right: 12px;
+    border-radius: 50%; /* Make it round */
+    object-fit: cover;
+}
+
+.youtubeLoadinglabel {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #334e68;
+    font-weight: 500;
+}
+
+/* This SubInput div seems unused in the React component's structure.
+   If it's meant to be a placeholder or separator, its styling
+   would depend on its intended use. For now, it's not styled.
+*/
+.SubInput {
+    /* No specific styles needed unless it has a function */
+    
+}
+
+/* Chat Output Area */
+.OutputChat {
+    flex-grow: 1; /* Allows the chat area to take all available space */
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Stack children vertically */
+    overflow: hidden; /* Important: Prevents children from overflowing this area visually */
+    
+}
+
+.chat_container {
+    flex-grow: 1; /* This container will take up remaining space above the input */
+    display: flex;
+    flex-direction: column; /* Essential for flex-grow: 1 on chat_display */
+    border-radius: 0 0 15px 15px; /* Match outer container's bottom radius */
+    overflow: hidden; /* Manages its own internal scrolling */
+    min-height: 0; /* Crucial for flex items with overflow */
+
+}
+
+.chat_display {
+    flex-grow: 1; /* Makes the chat history itself scrollable */
+    overflow-y: auto; /* THIS IS THE CRUCIAL PART FOR CHAT SCROLLING */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* More space between messages */
+    scroll-behavior: smooth;
+    &::-webkit-scrollbar {
+        display: none; /* Hide the scrollbar visual */
+        width: 0;      /* Ensure no space is taken by the scrollbar */
+        height: 0;     /* For horizontal scrollbars, if any */
+    }
+
+    /* --- NEW: Hide Scrollbar for Firefox --- */
+    scrollbar-width: none; /* 'none' hides the scrollbar */
+
+    /* --- NEW: Hide Scrollbar for Internet Explorer and old Edge --- */
+    -ms-overflow-style: none; /* Hides the scrollbar */
+    min-height: 0; /* Critical for flex items with overflow-y: auto; in some browsers */
+}
+
+.user_msg {
+    align-self: flex-end;
+    background: rgb(93, 205, 243);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 22px 22px 5px 22px; /* Chat bubble shape */
+    max-width: 70%;
+    word-wrap: break-word; /* Ensure long words break */
+    /* box-shadow: 0 3px 8px rgba(64, 146, 235, 0.25); */
+    font-size: 0.90rem;
+    line-height: 1.5;
+}
+
+.bot_msg {
+    align-self: flex-start;
+    background-color: #f2f4f6;
+    color: #333;
+    padding: 12px 18px;
+    border-radius: 22px 22px 22px 5px; /* Chat bubble shape */
+    max-width: 70%;
+    word-wrap: break-word;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e7ed; /* Subtle border */
+    font-size: 0.90rem;
+    line-height: 1.5;
+}
+
+/* Input Prompt Area */
+.get_input_prompt {
+    display: flex;
+    align-items: center; /* Vertically align items */
+    padding: 15px 20px;
+    background-color: #ffffff;
+    border-top: 1px solid #e0e7ed;
+    gap: 15px; /* Space between input and button */
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05); /* Shadow above input */
+    border-radius: 0 0 15px 15px; /* Match outer container's bottom radius */
+    flex-shrink: 0; /* Prevent the input area from shrinking */
+}
+
+.Input_prompt {
+    flex: 1; /* Takes most of the available space */
+    padding: 14px 20px; /* Larger padding for better touch targets and appearance */
+    border: 1px solid #c0d4e9;
+    border-radius: 30px; /* More prominent pill shape */
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #fcfdfe; /* Very light background for input */
+}
+
+.Input_prompt:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15); /* Soft focus glow */
+    background-color: #ffffff;
+}
+
+.sendBtn {
+    padding: 14px 28px; /* Larger padding for button */
+    background: linear-gradient(45deg, #00c6ff 0%, #007bff 100%); /* Vibrant blue gradient */
+    color: white;
+    border: none;
+    border-radius: 30px; /* Matches input pill shape */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 198, 255, 0.3); /* Button shadow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sendBtn:hover {
+    background: linear-gradient(45deg, #0099e6 0%, #0056b3 100%);
+    box-shadow: 0 6px 15px rgba(0, 198, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.sendBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 198, 255, 0.2);
+}
+
+/* Initial Welcome Screen Styles */
+.initial_welcome_screen {
+    flex-grow: 1; /* Make it take up the available space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    background-color: #f7f9fc; /* Match chat background */
+    border-radius: 0 0 15px 15px; /* Match outer container's bottom radius */
+}
+
+.initial_welcome_logo {
+    width: 120px; /* Larger logo for the welcome screen */
+    height: auto;
+    margin-bottom: 25px;
+}
+
+.initial_welcome_screen h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.initial_welcome_screen p {
+    color: #556270;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-bottom: 30px;
+}
+
+.initial_input_area {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    max-width: 600px; /* Limit input area width */
+}
+
+/* Optional: Add a subtle animation for the "Thinking..." message */
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+/* This targets the bot message that is immediately followed by 'Thinking...' */
+.bot_msg:has(+ .bot_msg[content="Thinking..."]) {
+    animation: pulse 1.5s infinite ease-in-out;
+}

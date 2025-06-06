@@ -13,6 +13,7 @@ main_class = youtubeautomationFlow()
 def process():
     data = request.json
     youtube_url = data.get('youtubeURL')
+    id = data.get('id')
 
     try:
         inputs = {'url':youtube_url}

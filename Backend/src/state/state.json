@@ -1,6 +1,6 @@
 {
   "main_path": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\main.py",
-  "youtube_url": "https://www.youtube.com/shorts/CIR6mZENrvE?feature=share",
+  "youtube_url": "https://www.youtube.com/watch?v=N3AkSS5hXMA&pp=ygUNd2hhdCBpcyByZWFjdA%3D%3D",
   "downloaded_audio_path": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\steps",
   "transcript_path": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\outputs\\transcript.txt",
   "Blog_output": "D:\\youtubeautomation_reactApp\\Youtube_automation\\Backend\\src\\outputs\\blog.md",

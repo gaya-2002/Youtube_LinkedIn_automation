@@ -7,6 +7,8 @@ import { useEffect } from 'react'
 import cloudArmeeLogo from '../assets/CloudArmeeLogo3.png'
 import cloudLogoOnly from '../assets/cloudarmeeLogoOnly.jpg'
 import {v4 as uuidv4} from 'uuid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'; // Import faBars and faTimes
 
 const Dashboard = () => {
 
@@ -14,11 +16,12 @@ const Dashboard = () => {
     const [loadingText, setLoadingText] = useState("Get YouTube link's blog.....");
     const [showChat, setShowChat] = useState(false);
     const [messages, setMessages] = useState([]);
-    const [placeholder, setPlaceholder] = useState('Paste YouTube link here...');    
+    const [placeholder, setPlaceholder] = useState('Paste YouTube link here...');
     const [userInput, setUserInput] = useState('');
     const chatEndRef = useRef(null);
     const [historyList, setHistoryList] = useState([])
     const [chatID, setChatID] = useState(null)
+    const [showSidebar, setShowSidebar] = useState(false); // New state for sidebar visibility
 
 
 const handleUserReply = async () => {
@@ -81,7 +84,10 @@ const handleUserReply = async () => {
                 url: youtubeURL,
                 chatMessages:finalMessages
             })
-            .then(response => console.log(response))
+            .then(response => {
+                console.log(response)
+                handleFinalizeChat(finalMessages, chatID, youtubeURL);
+            })
             .catch(error => console.log(error))
         }
         catch(error){
@@ -135,95 +141,166 @@ const handleUserReply = async () => {
     setUserInput('');
 };
 
+const handleFinalizeChat = async (currentMessages, currentChatID, currentYoutubeURL) => {
+        try {
+            await axios.post(`http://localhost:5000/save`, {
+                id: currentChatID,
+                url: currentYoutubeURL,
+                chatMessages: currentMessages
+            });
+            console.log("Chat saved successfully!");
+
+            // Add the current chat to the history list
+            setHistoryList(prevHistory => [
+                ...prevHistory,
+                { id: currentChatID, url: currentYoutubeURL, title: currentYoutubeURL.substring(0, 30) + '...' } // Or a more descriptive title
+            ]);
+
+            // Start a new chat
+            setYoutubeURL('');
+            setMessages([
+                { sender: 'bot', content: `Hi!, our AI tool transforms YouTube video captions into a professional, engaging blog post.You get to review the initial draft and can request a second, improved version if needed.` },
+                { sender: 'bot', content: 'Please enter your YouTube URL.' },
+            ]);
+            setPlaceholder('Paste YouTube link here...');
+            setChatID(uuidv4());
+        } catch (error) {
+            console.error("Error saving chat or initiating new chat:", error);
+            setMessages(prevMessages => [
+                ...prevMessages,
+                { sender: 'bot', content: 'There was an issue saving the chat or starting a new one. Please try again.' },
+            ]);
+        }
+    };
+
+// Function to toggle sidebar visibility
+const toggleSidebar = () => {
+    setShowSidebar(!showSidebar);
+};
 
 
 useEffect(() => {
-  setMessages([
-    {
-      sender: 'bot',
-      content: 'Hi! Please enter your YouTube URL.',
-    },
-  ]);
+    setMessages([
+        {
+            sender: 'bot',
+            content: `Hi!, our AI tool transforms YouTube video captions into a professional, 
+            engaging LinkedIn post.You get to review the initial draft and can request a second, improved version if needed.`,
+        },
+        {
+            sender: 'bot',
+            content: 'Please enter your YouTube URL.',
+        },
+    ]);
 }, []);
 
+const retrieveChatHistory = async (idToRetrieve) => {
+        try {
+            // First, clear current chat to show loading or new history
+            setMessages([{ sender: 'bot', content: 'Loading chat history...' }]);
+            setYoutubeURL(''); // Clear previous URL
+            setUserInput(''); // Clear user input
+            setPlaceholder('Paste YouTube link here...'); // Reset placeholder
+
+            const response = await axios.get(`http://localhost:5000/history/${idToRetrieve}`);
+            const { chatMessages, youtubeURL: retrievedUrl } = response.data;
+
+            if (chatMessages && chatMessages.length > 0) {
+                setMessages(chatMessages); // Set the messages from history
+                setChatID(idToRetrieve); // Set the current chat ID to the retrieved one
+                setYoutubeURL(retrievedUrl || ''); // Set the YouTube URL associated with this history
+                // You might want to adjust the placeholder or state based on the retrieved chat's last message
+                const lastMessage = chatMessages[chatMessages.length - 1];
+                if (lastMessage && lastMessage.content.includes('Are we good with the content?')) {
+                    setPlaceholder('Type "yes" to confirm or "no" to improve...');
+                } else {
+                    setPlaceholder('Type your next query or paste a new YouTube link...');
+                }
+            } else {
+                setMessages([{ sender: 'bot', content: 'No chat history found for this ID.' }]);
+            }
+        } catch (error) {
+            console.error('Error retrieving chat history:', error);
+            setMessages([{ sender: 'bot', content: 'Failed to retrieve chat history. Please try again.' }]);
+        }
+    };
+
+
 useEffect(() => {
-  if (chatEndRef.current) {
-    chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }
+    if (chatEndRef.current) {
+        chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
 }, [messages]);
 
 
     return (
         <div>
-            <div className="Navigation_bar">
-                <img src={cloudArmeeLogo} alt="Logo" className="cloudarmeeLogo" />
-            </div>
+            <img src={cloudArmeeLogo} alt="Logo" className="cloudarmeeLogo" />
 
-            <div  className="MainDiv">
 
-                <div className="SubDivLeft">
-                        <div className="Description">
-                            <h5>Description</h5>
-                            <p>&emsp; When you share a YouTube video link, our system automatically pulls the captions, 
-                                turns them into a blog-style summary, and then rewrites that into a professional blog. 
-                                You get to review the blog, and if you’re not happy with it, 
-                                we run it through a second round of improvement to make it clearer, more engaging,
-                                and better suited for your audience. All powered by AI, working quietly in the background &#128522;.</p>
-                        </div>
+            <div className="MainDiv">
+                {/* Sidebar Wrapper and Icon */}
+                <div className="side-nav-wrapper">
+                    <div className="menu-icon" onClick={toggleSidebar}>
+                        <FontAwesomeIcon icon={showSidebar ? faTimes : faBars} />
+                    </div>
+                    {/* SubDivLeft is now conditionally rendered with 'show' class */}
+                    <div className={`SubDivLeft ${showSidebar ? 'show' : ''}`}>
                         <div className="History">
                             <h5>History</h5>
-                            <ul id="historyList">{historyList}</ul>
+                            <ul id="historyList" >
+                                <li></li>
+                            </ul>
                         </div>
-                        <button className="btn btn-primary">Explore more GPT's</button>
+                        {/* <button className="btn btn-primary">Explore more GPT's</button> */}
+                    </div>
                 </div>
 
-                <div className="InputAndOutputDiv">
-                        <div className="OutputLogo">
-                            <img src={cloudLogoOnly} className="CloudarmeelogoOnly"/>
-                            <h5 className="youtubeLoadinglabel">{loadingText}</h5>
-                        </div>
-                        <div className="SubInput"></div>
+                <div className="InputAndOutputDiv" style={{ marginLeft: showSidebar ? '365px' : '205px' }}> {/* Adjusted margin */}
+                    {/* <div className="OutputLogo">
+                        <img src={cloudLogoOnly} className="CloudarmeelogoOnly"/>
+                        <h5 className="youtubeLoadinglabel">{loadingText}</h5>
+                    </div> */}
+                    <div className="SubInput"></div>
 
-                        <div className="OutputChat">
-                          
-                                <div className={`chat_container`} id="chatContainer">                            
-                                <div id="chatDisplay" className="chat_display">
-                                    {messages.map((msg, index) => (
-                                    msg.isMarkdown ? (
-                                        <div
-                                        key={index}
-                                        className={msg.sender === 'user' ? 'user_msg' : 'bot_msg'}
-                                        dangerouslySetInnerHTML={{ __html: msg.content }}
-                                        />
-                                    ) : (
-                                        <div
-                                        key={index}
-                                        className={msg.sender === 'user' ? 'user_msg' : 'bot_msg'}
-                                        >
-                                        {msg.content}
-                                        </div>
-                                    )
-                                    ))}
-                                    <div ref={chatEndRef}></div>
-                            </div>
-
-                                    <div className="get_input_prompt">
-                                        <input
-                                            type="text"
-                                            id="userInput"
-                                            className="Input_prompt"
-                                            placeholder={placeholder}
-                                            value={userInput}
-                                            onChange={(e) => setUserInput(e.target.value)}                                        
-                                        />
-                                        <button className="sendBtn" onClick={()=> handleUserReply()}>Send</button>
+                    <div className="OutputChat">
+                        <div className={`chat_container`} id="chatContainer">
+                            <div id="chatDisplay" className="chat_display">
+                                {messages.map((msg, index) => (
+                                msg.isMarkdown ? (
+                                    <div
+                                    key={index}
+                                    className={msg.sender === 'user' ? 'user_msg' : 'bot_msg'}
+                                    dangerouslySetInnerHTML={{ __html: msg.content }}
+                                    />
+                                ) : (
+                                    <div
+                                    key={index}
+                                    className={msg.sender === 'user' ? 'user_msg' : 'bot_msg'}
+                                    >
+                                    {msg.content}
                                     </div>
+                                )
+                                ))}
+                                <div ref={chatEndRef}></div>
                             </div>
 
+                            <div className="get_input_prompt">
+                                <input
+                                    type="text"
+                                    id="userInput"
+                                    className="Input_prompt"
+                                    placeholder={placeholder}
+                                    value={userInput}
+                                    onChange={(e) => setUserInput(e.target.value)}
+                                />
+                                <button className="sendBtn" onClick={()=> handleUserReply()}>Send</button>
+                            </div>
                         </div>
+
+                    </div>
                 </div>
+            </div>
         </div>
-    </div>
     )
 }
 
