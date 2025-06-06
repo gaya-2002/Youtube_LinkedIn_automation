@@ -22,7 +22,7 @@ class postcrew():
     def __init__(self,state,id):
         self.state=state
         self.chat_id=id
-        self.YouTubeTool=YouTubeCaptionAudioTool(state)
+        self.YouTubeTool=YouTubeCaptionAudioTool(state,id)
 
 
     @agent
