@@ -19,8 +19,9 @@ class postcrew():
     tasks: List[Task]
    
 
-    def __init__(self,state):
+    def __init__(self,state,id):
         self.state=state
+        self.chat_id=id
         self.YouTubeTool=YouTubeCaptionAudioTool(state)
 
 
@@ -66,28 +67,28 @@ class postcrew():
 
     @task
     def text_summarization_to_blog(self) -> Task:
-        self.state.set("Blog_output",str(Path(__file__).parent.parent.parent)+r"\outputs\blog.md")
+        self.state.set(self.chat_id,"Blog_output",str(Path(__file__).parent.parent.parent/"outputs"/"blog.md"))
         return Task(
             config=self.tasks_config['text_summarization_to_blog'], 
-            output_file=self.state.get("Blog_output"),
+            output_file=self.state.get(self.chat_id,"Blog_output"),
             outputs_to=['blog_to_linkedin_post']
         )
     
     @task
     def blog_to_linkedin_post(self) -> Task:
-        self.state.set("post_output",str(Path(__file__).parent.parent.parent)+r"\outputs\post.md")
+        self.state.set(self.chat_id,"post_output",str(Path(__file__).parent.parent.parent/"outputs"/"post.md"))
         return Task(
             config=self.tasks_config['blog_to_linkedin_post'], 
-            output_file=self.state.get("post_output"),
+            output_file=self.state.get(self.chat_id,"post_output"),
             outputs_to=['post_editing']
         )
 
     @task
     def post_editing(self) -> Task:
-        self.state.set("edited_post_output",str(Path(__file__).parent.parent.parent)+r"\outputs\edited_post.md")
+        self.state.set(self.chat_id,"edited_post_output",str(Path(__file__).parent.parent.parent/"outputs"/"edited_post.md"))
         return Task(
             config=self.tasks_config['post_editing'], 
-            output_file=self.state.get("edited_post_output")
+            output_file=self.state.get(self.chat_id,"edited_post_output")
         )
 
     @crew

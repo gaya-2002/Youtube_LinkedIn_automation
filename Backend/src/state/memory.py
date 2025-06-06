@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 class SharedState:
-    _instance = None  # Singleton instance
+    _instance = None 
 
     def __new__(cls,filename=str(Path(__file__).parent) + r"\state.json"):
         if cls._instance is None:
@@ -24,16 +24,19 @@ class SharedState:
         with open(self.filename, "w") as f:
             json.dump(self.state, f, indent=2)
 
-    def set_chat_id(self,session):
-        self.state[session]={}
+    def set_chat_id(self,chat_id):
+        self.state[chat_id]={}
         self._save()
+
+    def get_keys(self):
+        return self.state.keys()
 
     def set(self,chat_id, key, value):
         self.state[chat_id][key] = value
         self._save()
 
-    def get(self, key):
-        return self.state.get(key)
+    def get(self, chat_id,key):
+        return self.state.get(chat_id,{}).get(key,{})
 
     def all(self):
         return self.state
