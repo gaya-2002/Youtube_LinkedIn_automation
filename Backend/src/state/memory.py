@@ -24,8 +24,12 @@ class SharedState:
         with open(self.filename, "w") as f:
             json.dump(self.state, f, indent=2)
 
-    def set(self, key, value):
-        self.state[key] = value
+    def set_chat_id(self,session):
+        self.state[session]={}
+        self._save()
+
+    def set(self,chat_id, key, value):
+        self.state[chat_id][key] = value
         self._save()
 
     def get(self, key):
