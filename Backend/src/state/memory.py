@@ -16,12 +16,11 @@ class SharedState:
             with open(self.filename, "r", encoding='utf-8') as f:
                 return json.load(f)
         except FileNotFoundError:
-            with open(self.filename,"w",encoding='utf-8') as f:
-                pass
-            return {}
+            with open(self.filename, "w", encoding="utf-8") as f:
+                json.dump({}, f)
 
     def _save(self):
-        with open(self.filename, "w") as f:
+        with open(self.filename, "w", encoding="utf-8") as f:
             json.dump(self.state, f, indent=2)
 
     def set_chat_id(self,chat_id):
