@@ -9,6 +9,9 @@ import cloudLogoOnly from '../assets/cloudarmeeLogoOnly.jpg'
 import {v4 as uuidv4} from 'uuid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'; // Import faBars and faTimes
+import linkedInLogo from '../assets/LinkedIn_Img.png'
+import { faMessage } from '@fortawesome/free-solid-svg-icons';      // Newer chat/message icon
+
 
 const Dashboard = () => {
 
@@ -22,6 +25,7 @@ const Dashboard = () => {
     const [historyList, setHistoryList] = useState([])
     const [chatID, setChatID] = useState(null)
     const [showSidebar, setShowSidebar] = useState(false); // New state for sidebar visibility
+    const [newChatBool, setNewChatBool] = useState(false)
 
 
 const handleUserReply = async () => {
@@ -78,21 +82,8 @@ const handleUserReply = async () => {
         setMessages(finalMessages);    
         setUserInput('');
         console.log(finalMessages,chatID,youtubeURL)
-        try{
-            axios.post(`http://localhost:5000/save`,{
-                id: chatID,
-                url: youtubeURL,
-                chatMessages:finalMessages
-            })
-            .then(response => {
-                console.log(response)
-                handleFinalizeChat(finalMessages, chatID, youtubeURL);
-            })
-            .catch(error => console.log(error))
-        }
-        catch(error){
-            console.log(error)
-        }
+        handleFinalizeChat(finalMessages, chatID, youtubeURL);
+
     } else if (userInput.toLowerCase() === 'no') {
         try {
             setUserInput('');
@@ -148,22 +139,23 @@ const handleFinalizeChat = async (currentMessages, currentChatID, currentYoutube
                 url: currentYoutubeURL,
                 chatMessages: currentMessages
             });
-            console.log("Chat saved successfully!");
+                console.log(currentMessages)
+                // Add the current chat to the history list
+                setHistoryList(prevHistory => [
+                    ...prevHistory,
+                    { id: currentChatID, url: currentYoutubeURL, title: currentYoutubeURL.substring(0, 30) + '...' } // Or a more descriptive title
+                ]);
+                console.log('historyList',historyList)
 
-            // Add the current chat to the history list
-            setHistoryList(prevHistory => [
-                ...prevHistory,
-                { id: currentChatID, url: currentYoutubeURL, title: currentYoutubeURL.substring(0, 30) + '...' } // Or a more descriptive title
-            ]);
-
-            // Start a new chat
-            setYoutubeURL('');
-            setMessages([
-                { sender: 'bot', content: `Hi!, our AI tool transforms YouTube video captions into a professional, engaging blog post.You get to review the initial draft and can request a second, improved version if needed.` },
-                { sender: 'bot', content: 'Please enter your YouTube URL.' },
-            ]);
-            setPlaceholder('Paste YouTube link here...');
-            setChatID(uuidv4());
+                // Start a new chat
+                setYoutubeURL('');
+                setMessages([
+                    { sender: 'bot', content: `Hi!, our AI tool transforms YouTube video captions into a professional, engaging blog post.You get to review the initial draft and can request a second, improved version if needed.` },
+                    { sender: 'bot', content: 'Please enter your YouTube URL.' },
+                ]);
+                setPlaceholder('Paste YouTube link here...');
+                setChatID(uuidv4());
+ 
         } catch (error) {
             console.error("Error saving chat or initiating new chat:", error);
             setMessages(prevMessages => [
@@ -240,15 +232,27 @@ useEffect(() => {
             <div className="MainDiv">
                 {/* Sidebar Wrapper and Icon */}
                 <div className="side-nav-wrapper">
-                    <div className="menu-icon" onClick={toggleSidebar}>
-                        <FontAwesomeIcon icon={showSidebar ? faTimes : faBars} />
-                    </div>
+                  <div style={{display:'flex',flexDirection:'row', gap:'15px'}}>
+                        <div className="menu-icon" onClick={toggleSidebar}>
+                            <FontAwesomeIcon icon={showSidebar ? faTimes : faBars} />
+                        </div>
+                        <div className="menu-icon">
+                            <FontAwesomeIcon icon={faMessage } />
+                        </div>
+                  </div>
+                    
                     {/* SubDivLeft is now conditionally rendered with 'show' class */}
                     <div className={`SubDivLeft ${showSidebar ? 'show' : ''}`}>
                         <div className="History">
                             <h5>History</h5>
                             <ul id="historyList" >
-                                <li></li>
+                                {historyList.map(item=>{
+                                    return (
+                                        <li key={item.id} onClick={() => retrieveChatHistory(item.id)}>
+                                            {item.title}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                         {/* <button className="btn btn-primary">Explore more GPT's</button> */}
@@ -293,7 +297,8 @@ useEffect(() => {
                                     value={userInput}
                                     onChange={(e) => setUserInput(e.target.value)}
                                 />
-                                <button className="sendBtn" onClick={()=> handleUserReply()}>Send</button>
+                                <button className="sendBtn" onClick={()=> handleUserReply()}>&rarr;</button>
+                                <button className="sendBtnLinkedIn">LinkedIn</button>
                             </div>
                         </div>
 

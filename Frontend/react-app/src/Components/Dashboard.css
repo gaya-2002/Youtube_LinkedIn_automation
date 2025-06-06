@@ -138,7 +138,6 @@ h5 {
     /* Removed the fixed height previously here, let flexbox control it */
     overflow-y: auto; /* Make only history scrollable */
     /* Ensure flex-grow is applied if you want it to fill space */
-    margin-top: -45px;
 }
 /* Ensure SubDivLeft > div is flex-grow: 1 for History to take space */
 
@@ -236,10 +235,6 @@ h5 {
    If it's meant to be a placeholder or separator, its styling
    would depend on its intended use. For now, it's not styled.
 */
-.SubInput {
-    /* No specific styles needed unless it has a function */
-    
-}
 
 /* Chat Output Area */
 .OutputChat {
@@ -340,7 +335,22 @@ h5 {
 }
 
 .sendBtn {
-    padding: 14px 28px; /* Larger padding for button */
+    padding: 5px 10px; /* Larger padding for button */
+    background: linear-gradient(45deg, #00c6ff 0%, #007bff 100%); /* Vibrant blue gradient */
+    color: white;
+    border: none;
+    border-radius: 30px; /* Matches input pill shape */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 198, 255, 0.3); /* Button shadow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sendBtnLinkedIn {
+    padding: 5px 10px; /* Larger padding for button */
     background: linear-gradient(45deg, #00c6ff 0%, #007bff 100%); /* Vibrant blue gradient */
     color: white;
     border: none;
