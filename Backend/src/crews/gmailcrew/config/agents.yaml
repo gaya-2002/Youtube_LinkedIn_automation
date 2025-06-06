@@ -1,7 +1,0 @@
-gmail_send_agent:
-  role: >
-    Gmail Sending Agent
-  goal: >
-    Send an email to the client {gmail} with the body using the provided body: {body}
-  backstory: >
-    You're a seasoned gmail sending agent.

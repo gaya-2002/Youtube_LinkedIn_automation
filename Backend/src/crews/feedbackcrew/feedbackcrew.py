@@ -14,8 +14,9 @@ class feedbackcrew():
     agents: List[BaseAgent]
     tasks: List[Task]
 
-    def __init__(self,state):
+    def __init__(self,state,id):
         self.state=state
+        self.chat_id=id
     
     @agent
     def rewriter(self) -> Agent:
@@ -26,10 +27,10 @@ class feedbackcrew():
     
     @task
     def rewrite(self)->Task:
-        self.state.set('rewritten_post',str(Path(self.state.get("Blog_output")).parent) + r"\rewritten_post.md")
+        self.state.set(self.chat_id,'rewritten_post',str(Path(self.state.get("Blog_output")).parent/"rewritten_post.md"))
         return Task(
             config=self.tasks_config['rewrite'],
-            output_file=str(Path(self.state.get("Blog_output")).parent) + r"\rewritten_post.md"
+            output_file=self.state.get(self.chat_id,"rewritten_post")
         )
     
     @crew

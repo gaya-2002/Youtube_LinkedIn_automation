@@ -1,9 +1,0 @@
-gmail_sending_task:
-  description: >
-    Send an email to the client {gmail} with the body using the provided body. 
-    Always Use the the provided GmailTool to send the e-mail and pass the necessary inputs [body of the email, Receivers e-mail id] to the tool
-    body:{body}
-
-  expected_output: >
-    Send the e-mail to the given e-mail using the provided GmailTool succesfully.
-  agent: gmail_send_agent
