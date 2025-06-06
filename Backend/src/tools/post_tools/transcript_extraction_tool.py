@@ -34,14 +34,15 @@ class YouTubeCaptionAudioTool(BaseTool):
     state: any = Field(default=None)
     audio_filename: str = Field(default=None)
     transcript_filename: str= Field(default=None)
+    chat_id: any= Field(default=None)
 
     def __init__(self,state):
-        super().__init__(state=state)
+        super().__init__(state=state,chat_id=id)
         self.state=state
-        self.audio_filename= str(Path(__file__).parent.parent.parent) + r"\steps"
-        self.state.set("downloaded_audio_path",self.audio_filename)
-        self.transcript_filename=str(Path(__file__).parent.parent.parent)+ r"\outputs\transcript.txt"
-        self.state.set("transcript_path",self.transcript_filename)
+        self.chat_id=id
+        self.audio_filename= self.state.get(self.chat_id,"downloaded_audio_path")
+        self.transcript_filename=str(Path(self.state.get(self.chat_id,"Blog_output")).parent/"transcript.txt")
+        self.state.set(self.chat_id,"transcript_path",self.transcript_filename)
 
     def get_wav_duration(self,file_path):
         with contextlib.closing(wave.open(file_path, 'r')) as f:
@@ -58,7 +59,7 @@ class YouTubeCaptionAudioTool(BaseTool):
         for start in range(0, total_samples, chunk_size):
             end = min(start + chunk_size, total_samples)
             chunk_data = data[start:end]
-            chunk_path = self.audio_filename + r"\chunk_"+ f"{len(chunks)}.wav"
+            chunk_path = str( Path(self.audio_filename)/ "chunk_" / f"{len(chunks)}.wav" )
             sf.write(chunk_path, chunk_data, sample_rate)
             chunks.append(chunk_path)
         return chunks
